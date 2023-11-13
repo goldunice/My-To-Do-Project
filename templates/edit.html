@@ -9,22 +9,23 @@
     <div class="container">
       <h1>Edit Task</h1>
       <form>
+        {% csrf_token %}
         <div class="form-group">
           <label for="task-name">Task Name</label>
-          <input type="text" id="task-name" placeholder="Enter task name...">
+          <input type="text" id="task-name" value="{{ reja.title }}">
           <label for="task-details">Task Detail</label>
-          <input type="text" id="task-details" placeholder="Enter task details...">
+          <input type="text" id="task-details" value="{{ reja.details }}">
         </div>
         <div class="form-group">
           <label for="status">Status</label>
           <select id="status">
-            <option>Not started</option>
-            <option>In Progress</option>
-            <option>Completed</option>
+            {% for s in holatlar %}
+            <option value="{{s}}">{{s}}</option>
+            {% endfor %}
           </select>
         </div>
-        <button type="submit" class="btn">Save</button>
-        <a href="#" class="btn cancel" style="text-decoration: none;">Cancel</a>
+          <button type="submit" class="btn">Save</button>
+        <a href="/home/" class="btn cancel" style="text-decoration: none;">Cancel</a>
       </form>
     </div>
   </body>

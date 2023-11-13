@@ -10,8 +10,8 @@
     <div class="head">
         <h1>To-Do List</h1>
         <div style="display: flex; align-items: center;">
-            <h3>User</h3>
-            <a href="./login.html" style="text-decoration: none; color: red;">
+            <h3>{{ foydalanuvchi }}</h3>
+            <a href="/logut/" style="text-decoration: none; color: red;">
                 Log out
             </a>
         </div>
@@ -19,19 +19,16 @@
 
     <div class="task-add">
         <form id="task-form" method="post">
+            {% csrf_token %}
             <div class="form1">
                 <input type="text" name="name" placeholder="Add Task...">
                 <input type="date" name="date">
                 <select name="status">
-                    <option class="opt">
-                        Not started
+                    {% for s in holatlar %}
+                    <option class="opt" value="{{s}}">
+                        {{s}}
                     </option>
-                    <option class="opt">
-                        In progress
-                    </option>
-                    <option class="opt">
-                        Completed
-                    </option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="fomr1">
@@ -41,43 +38,28 @@
         </form>
     </div>
     <hr style="margin: 10px 5px;">
+        {% for r in rejalar %}
     <div class="task">
+
         <ul id="task-list">
             <li>
                 <div>
-                    Task-name
+                    {{ r.title }}
                 </div>
                 <div>
-                    <input type="text" value="Completed" readonly>
-                    <input type="date" value="2023-03-06" readonly>
-                    <button type="submit" class="edit"><a href="./edit.html">Edit</a></button>
-                    <button type="submit" class="delete"><a href="./edit.html">Delete</a></button>
+                    <input type="text" value="{{r.status}}" readonly>
+                    <input type="text" value="{{r.date}}" readonly>
+                    <button type="submit" class="edit"><a href="/edit/{{r.id}}/">Edit</a></button>
+                    <button type="submit" class="delete"><a href="/delete_plan/{{r.id}}/">Delete</a></button>
                 </div>
             </li>
         </ul>
         <ul class="details">
-            Task-Details: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam, eaque?
+            Task-Details: {{ r.details }}
         </ul>
+
     </div>
-    <div class="task">
-        <ul id="task-list">
-            <li>
-                <div>
-                    Task-name
-                </div>
-                <div>
-                    <input type="text" value="In progress" readonly>
-                    <input type="date" value="2023-03-06" readonly>
-                    <button type="submit" class="edit"><a href="./edit.html">Edit</a></button>
-                    <button type="submit" class="delete"><a href="./edit.html">Delete</a></button>
-                </div>
-            </li>
-        </ul>
-        <ul class="details">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime molestiae molestias explicabo recusandae a
-            perspiciatis beatae dolorem vitae. Reprehenderit, numquam?
-        </ul>
-    </div>
+        {% endfor %}
 </div>
 </body>
 </html>
