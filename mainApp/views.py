@@ -49,7 +49,7 @@ def edit(request, num):
 
 
 def login_view(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.POST.get("forma") == "f2":
         user = authenticate(
             username=request.POST.get("l"),
             password=request.POST.get("p")
@@ -58,8 +58,17 @@ def login_view(request):
             return redirect("/")
         login(request, user)
         return redirect("/home/")
+    elif request.method == 'POST' and request.POST.get("forma") == "f1":
+        try:
+            User.objects.create_user(
+                username=request.POST.get("l"),
+                email=request.POST.get("email"),
+                password=request.POST.get("p1"),
+            )
+        finally:
+            return redirect("/")
 
-    return render(request, 'login.html')
+    return render(request, 'register.html')
 
 
 def logout_view(request):

@@ -8,3 +8,8 @@ class PlanAdmin(admin.ModelAdmin):
     list_display_links = ["id", "title"]
     list_filter = ["status", "date", "egasi"]
     search_fields = ["title"]
+
+
+@admin.register(Talaba)
+class TalabaAdmin(admin.ModelAdmin):
+    list_display = ["id", "ism"]
