@@ -1,6 +1,6 @@
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from .models import *
-from django.contrib.auth import authenticate, login, logout
 
 
 def home(request):
@@ -11,14 +11,15 @@ def home(request):
                 details=request.POST.get("details"),
                 date=request.POST.get("date"),
                 status=request.POST.get("status"),
-                egasi=request.user
+                egasi=Talaba.objects.filter(user=request.user).first()
             )
             return redirect("/home/")
 
         holat = [x[0] for x in status]
+        talaba = Talaba.objects.filter(user=request.user).first()
         content = {
             "holatlar": holat,
-            "rejalar": Plan.objects.filter(egasi=request.user),
+            "rejalar": Plan.objects.filter(egasi=talaba),
             "foydalanuvchi": request.user.username.capitalize()
         }
         return render(request, 'index.html', content)
@@ -27,8 +28,10 @@ def home(request):
 
 
 def delete_plan(request, num):
-    Plan.objects.get(id=num).delete()
-    return redirect("/home/")
+    if request.user.is_authenticated:
+        Plan.objects.get(id=num).delete()
+        return redirect("/home/")
+    return redirect('/')
 
 
 def edit(request, num):
@@ -41,11 +44,11 @@ def edit(request, num):
         )
         return redirect("/home/")
     holat = [x[0] for x in status]
-    content = {
+    context = {
         "reja": Plan.objects.get(id=num),
         "holatlar": holat
     }
-    return render(request, 'edit.html', content)
+    return render(request, 'edit.html', context)
 
 
 def login_view(request):
